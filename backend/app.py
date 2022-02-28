@@ -25,12 +25,11 @@ def create_app(config):
     api.add_namespace(auth_ns)
 
     @app.shell_context_processor
-    
     def make_shell_context():
         return{
-                "db":db, 
-                "SList":Slist,
-                "User": User
+            "db":db, 
+            "SList":Slist,
+            "User": User
 
 
                 }

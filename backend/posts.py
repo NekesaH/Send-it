@@ -20,15 +20,16 @@ slist_model =posts_ns.model(
 @posts_ns.route('/lists')
 class SlistsResource(Resource):
 
-    @posts_ns.marshal_list_with(posts_ns)
+    @posts_ns.marshal_list_with(slist_model)
     def get(self): 
         """Get all lists"""
         slists = Slist.query.all()
         return slists
 
         
-    @posts_ns.marshal_with(posts_ns)
-    @posts_ns.expect(posts_ns)
+    @posts_ns.marshal_with(slist_model)
+    @posts_ns.expect(slist_model)
+    @jwt_required
     def post(self):
         data = request.get_json()
         new_list = Slist(
@@ -42,11 +43,13 @@ class SlistsResource(Resource):
 
 @posts_ns.route('/lists/<int:id>')
 class SlistResource(Resource):
-    @posts_ns.marshal_with(posts_ns)
+    @posts_ns.marshal_with(slist_model)
     def get(self, id):
         lists = Slist.query.get_or_404(id)
         return lists
-    @posts_ns.marshal_with(posts_ns)
+
+
+    @posts_ns.marshal_with(slist_model)
     @jwt_required
     def put(self, id):
         """update recipe"""
@@ -59,11 +62,11 @@ class SlistResource(Resource):
         return new_update
 
 
-
+    @posts_ns.marshal_with(slist_model)
     @jwt_required
     def delete(self, id):
         """Delete"""
-        pass
+        
         s_delete = Slist.query.get_or_404(id)
         s_delete.delete()
 
